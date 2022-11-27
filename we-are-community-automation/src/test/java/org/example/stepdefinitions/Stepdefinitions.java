@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.managers.PageObjectManager;
 import org.example.pageobjects.EventsPage;
 import org.example.pageobjects.LoginPage;
 import org.example.pageobjects.MainPage;
@@ -17,6 +18,8 @@ public class Stepdefinitions {
     SearchPage searchPage;
     EventsPage eventsPage;
     LoginPage loginPage;
+
+    PageObjectManager pageObjectManager;
     public static final String HOME_PAGE_URL = "https://wearecommunity.io";
 
 
@@ -25,41 +28,44 @@ public class Stepdefinitions {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(HOME_PAGE_URL);
+        pageObjectManager = new PageObjectManager(driver);
+        mainPage = pageObjectManager.getMainPage();
     }
 
     @When("the search field filled with {string}")
     public void theSearchFieldFilledWithValue(String value) {
-        mainPage = new MainPage(driver);
+        mainPage = pageObjectManager.getMainPage();
         mainPage.searchFieldFilledWithValue(value);
     }
 
     @And("I click on the search button")
     public void iClickOnTheSearchButton() {
-        mainPage.clickOnTheSearchButton();
+
+        mainPage = pageObjectManager.getMainPage();mainPage.clickOnTheSearchButton();
     }
 
     @Then("the {string} page loaded")
     public void theRequiredPageLoaded(String value) {
-        searchPage = new SearchPage(driver);
+        searchPage = pageObjectManager.getSearchPage();
         searchPage.requiredPageLoaded(value);
     }
 
     @When("I click on the Events button")
     public void iClickOnTheAriclesButton() {
-        mainPage = new MainPage(driver);
+        mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheAriclesButton();
     }
 
     @When("I click on the Location")
     public void iClickOnTheLocation() {
-        eventsPage = new EventsPage(driver);
+        eventsPage = pageObjectManager.getEventsPage();
         eventsPage.clickOnTheLocationButton();
 
     }
 
     @And("I fill the Location input with {string}")
     public void iFillTheInputWithHungary(String location) {
-        eventsPage = new EventsPage(driver);
+        eventsPage = pageObjectManager.getEventsPage();
         eventsPage.fillTheLocationInput(location);
     }
 
@@ -70,45 +76,50 @@ public class Stepdefinitions {
 
     @When("I click on the language selector")
     public void iClickOnTheLanguageSelector() {
-        mainPage = new MainPage(driver);
+        mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheLanguageSelector();
     }
 
     @And("I click on the russian option")
     public void iClickOnTheRussianOption() {
+        mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheRussianOption();
     }
 
     @When("I click on the Login button")
     public void iClickOnTheLoginButton() throws InterruptedException {
-        mainPage = new MainPage(driver);
+        mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheLoginButton();
     }
 
     @And("the Login page opened")
     public void theLoginPageOpened() {
-        loginPage = new LoginPage(driver);
+        loginPage = pageObjectManager.getLoginPage();
         loginPage.checkWelcomeHeader();
     }
 
     @And("I fill the email field")
     public void iFillTheEmailField() {
+        loginPage = pageObjectManager.getLoginPage();
         loginPage.fillTheEmailField();
 
     }
 
     @And("I click on the Continue button")
     public void iClickOnTheContinueButton() throws InterruptedException {
+        loginPage = pageObjectManager.getLoginPage();
         loginPage.clickOnTheLoginButton();
     }
 
     @And("I fill the password field with invalid value")
     public void iFillThePasswordFieldWithInvalidValue() throws InterruptedException {
+        loginPage = pageObjectManager.getLoginPage();
         loginPage.fillLoginCredentials();
     }
 
     @Then("the error should be shown")
     public void theErrorShouldBeShown() {
+        loginPage = pageObjectManager.getLoginPage();
         loginPage.lenghtErrorIsVisible();
     }
 }

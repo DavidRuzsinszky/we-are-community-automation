@@ -18,28 +18,30 @@ import java.time.Duration;
 import java.util.function.Function;
 
 public class MainPage {
-    @FindBy(how = How.XPATH, using = "//div/input[@class='evnt-text-fields form-control evnt-search small']")
+    WebDriver driver;
+    @FindBy(xpath = "//div/input[@class='evnt-text-fields form-control evnt-search small']")
     private WebElement searchBar;
 
-    @FindBy(how = How.XPATH, using = "//div/span[@class='evnt-search-icon']")
+    @FindBy(xpath = "//div/span[@class='evnt-search-icon']")
     private WebElement searchButton;
 
-    @FindBy(how = How.ID, using = "onetrust-accept-btn-handler")
+    @FindBy(id = "onetrust-accept-btn-handler")
     private WebElement cookieDisclaimerButton;
 
-    @FindBy(how = How.CSS, using = "a[href*='/all-events']")
+    @FindBy(css = "a[href*='/all-events']")
     private WebElement articlesPageButton;
 
-    @FindBy(how = How.XPATH, using = "//li[@class='evnt-tools-menu language nav-item dropdown']/a")
+    @FindBy(xpath = "//li[@class='evnt-tools-menu language nav-item dropdown']/a")
     private WebElement languageSelector;
 
-    @FindBy(how = How.XPATH, using = "//div[@class='dropdown-menu dropdown-menu-right show']/a[2]")
+    @FindBy(xpath = "//div[@class='dropdown-menu dropdown-menu-right show']/a[2]")
     private WebElement option;
 
-    @FindBy(how = How.XPATH, using = "//a[@href='/login?return_url=%2F']")
+    @FindBy(xpath = "//a[@href='/login?return_url=%2F']")
     private WebElement loginButton;
 
     public MainPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -56,11 +58,11 @@ public class MainPage {
         articlesPageButton.click();
     }
 
-    public void clickOnTheLanguageSelector(){
+    public void clickOnTheLanguageSelector() {
         languageSelector.click();
     }
 
-    public void clickOnTheRussianOption(){
+    public void clickOnTheRussianOption() {
         option.click();
     }
 

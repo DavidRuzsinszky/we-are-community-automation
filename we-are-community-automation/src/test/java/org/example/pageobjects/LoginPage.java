@@ -8,17 +8,18 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage {
+    WebDriver driver;
 
-    @FindBy(how = How.ID, using = "chooseContainer")
+    @FindBy(id = "chooseContainer")
     private WebElement welcomeHeader;
 
-    @FindBy(how = How.ID, using = "username")
+    @FindBy(id =  "username")
     private WebElement emailField;
 
-    @FindBy(how = How.ID, using = "kc-login-next")
+    @FindBy(id =  "kc-login-next")
     private WebElement loginButton;
 
-    @FindBy(how = How.ID, using = "firstName")
+    @FindBy(id =  "firstName")
     private WebElement firstName;
 
     @FindBy(how = How.ID, using = "lastName")
@@ -26,10 +27,11 @@ public class LoginPage {
 
     @FindBy(how = How.ID, using = "password")
     private WebElement password;
-    @FindBy(how = How.ID, using = "hasLength-msg")
+    @FindBy(id =  "hasLength-msg")
     private WebElement lenghtError;
 
     public LoginPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 

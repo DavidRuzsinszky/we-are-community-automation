@@ -10,15 +10,17 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.Locale;
 
 public class SearchPage {
-
-    @FindBy(how = How.XPATH, using = "//div/h1")
+    WebDriver driver;
+    @FindBy(xpath = "//div/h1")
     private WebElement logo;
-    @FindBy(how = How.XPATH, using = "//h2[text()='Debrecen Java Community']")
+    @FindBy(xpath = "//h2[text()='Debrecen Java Community']")
     private WebElement card;
 
     public SearchPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
+
     public void requiredPageLoaded(String value) {
         String actual = logo.getText();
         Assert.assertEquals(value, actual.toLowerCase());
