@@ -36,6 +36,9 @@ public class MainPage {
     @FindBy(how = How.XPATH, using = "//div[@class='dropdown-menu dropdown-menu-right show']/a[2]")
     private WebElement option;
 
+    @FindBy(how = How.XPATH, using = "//a[@href='/login?return_url=%2F']")
+    private WebElement loginButton;
+
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -59,5 +62,10 @@ public class MainPage {
 
     public void clickOnTheRussianOption(){
         option.click();
+    }
+
+    public void clickOnTheLoginButton() throws InterruptedException {
+        loginButton.click();
+        Thread.sleep(5000);
     }
 }

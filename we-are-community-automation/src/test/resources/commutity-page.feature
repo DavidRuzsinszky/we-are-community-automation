@@ -7,7 +7,7 @@ Feature: WeAreCommunity tests
     And I click on the search button
     Then the 'search' page loaded
 
-  Scenario: Change location in Articles pages
+  Scenario: Change location in Events pages
     Given the main page is loaded
 #    And the Cookie disclaimer is closed
     When I click on the Events button
@@ -21,3 +21,14 @@ Feature: WeAreCommunity tests
 #    And the Cookie disclaimer is closed
     When I click on the language selector
     And I click on the russian option
+
+  Scenario: Signup with invalid password
+    Given the main page is loaded
+#    And the Cookie disclaimer is closed
+    When I click on the Login button
+    And the Login page opened
+    And I fill the email field
+    And I click on the Continue button
+    And I fill the password field with invalid value
+    Then the error should be shown
+
