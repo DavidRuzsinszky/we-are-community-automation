@@ -1,6 +1,7 @@
 package org.example.pageobjects;
 
 import org.checkerframework.checker.units.qual.C;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -40,6 +41,9 @@ public class MainPage {
     @FindBy(xpath = "//a[@href='/login?return_url=%2F']")
     private WebElement loginButton;
 
+    @FindBy(xpath = "//div[@class = 'evnt-text']/h1")
+    private WebElement header;
+
     public MainPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -69,5 +73,10 @@ public class MainPage {
     public void clickOnTheLoginButton() throws InterruptedException {
         loginButton.click();
         Thread.sleep(5000);
+    }
+    public void checkWelcomeHeader(){
+        String actual = header.getText();
+        String expected = "Achieve more with the community";
+        Assert.assertEquals(expected, actual);
     }
 }

@@ -1,10 +1,13 @@
 package org.example.stepdefinitions;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.dataProvider.ConfigFileReader;
 import org.example.managers.PageObjectManager;
+import org.example.managers.WebDriverManager;
 import org.example.pageobjects.EventsPage;
 import org.example.pageobjects.LoginPage;
 import org.example.pageobjects.MainPage;
@@ -20,16 +23,18 @@ public class Stepdefinitions {
     LoginPage loginPage;
 
     PageObjectManager pageObjectManager;
-    public static final String HOME_PAGE_URL = "https://wearecommunity.io";
+    WebDriverManager webDriverManager;
+    ConfigFileReader configFileReader;
 
 
     @Given("the main page is loaded")
     public void theMainPageIsOpened() {
-        driver = new ChromeDriver();
+        webDriverManager = new WebDriverManager();
+        configFileReader = new ConfigFileReader();
+        driver = webDriverManager.getDriver();
         driver.manage().window().maximize();
-        driver.get(HOME_PAGE_URL);
+        driver.get(configFileReader.getApplicationUrl());
         pageObjectManager = new PageObjectManager(driver);
-        mainPage = pageObjectManager.getMainPage();
     }
 
     @When("the search field filled with {string}")
@@ -121,5 +126,9 @@ public class Stepdefinitions {
     public void theErrorShouldBeShown() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.lenghtErrorIsVisible();
+    }
+    @After
+    public void afterScenario(){
+        webDriverManager.closeDriver();
     }
 }
