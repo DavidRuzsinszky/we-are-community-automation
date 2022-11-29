@@ -1,22 +1,15 @@
 package org.example.pageobjects;
 
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.function.Function;
 
 public class MainPage {
     WebDriver driver;
@@ -50,33 +43,55 @@ public class MainPage {
     }
 
     public void searchFieldFilledWithValue(String value) {
+        waitForElementToBeClickable(searchBar);
         searchBar.click();
         searchBar.sendKeys(value);
     }
 
     public void clickOnTheSearchButton() {
+        waitForElementToBeClickable(searchButton);
         searchButton.click();
     }
 
     public void clickOnTheAriclesButton() {
+        waitForElementToBeClickable(articlesPageButton);
         articlesPageButton.click();
     }
 
     public void clickOnTheLanguageSelector() {
+        waitForElementToBeClickable(languageSelector);
         languageSelector.click();
     }
 
     public void clickOnTheRussianOption() {
+        waitForElementToBeClickable(option);
         option.click();
     }
 
     public void clickOnTheLoginButton() throws InterruptedException {
+        waitForElementToBeClickable(loginButton);
         loginButton.click();
         Thread.sleep(5000);
     }
-    public void checkWelcomeHeader(){
+
+    public void checkWelcomeHeader() {
         String actual = header.getText();
         String expected = "Achieve more with the community";
         Assert.assertEquals(expected, actual);
+    }
+
+    public void clickOnTheCookieDisclaimer() {
+        waitForElementToBeClickable(cookieDisclaimerButton);
+        cookieDisclaimerButton.click();
+    }
+
+    public void waitForElementToBeClickable(final WebElement webElement) {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                    ExpectedConditions.elementToBeClickable(webElement)
+            );
+        } catch (NoSuchElementException exception) {
+            throw new RuntimeException("Element is not clickable!");
+        }
     }
 }

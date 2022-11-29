@@ -7,13 +7,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.dataProvider.ConfigFileReader;
 import org.example.managers.PageObjectManager;
-import org.example.managers.WebDriverManager;
-import org.example.pageobjects.EventsPage;
-import org.example.pageobjects.LoginPage;
-import org.example.pageobjects.MainPage;
-import org.example.pageobjects.SearchPage;
+import org.example.managers.WebDriverFactory;
+import org.example.pageobjects.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Stepdefinitions {
     WebDriver driver;
@@ -23,20 +19,21 @@ public class Stepdefinitions {
     LoginPage loginPage;
 
     PageObjectManager pageObjectManager;
-    WebDriverManager webDriverManager;
+    WebDriverFactory webDriverFactory;
     ConfigFileReader configFileReader;
 
 
     @Given("the main page is loaded")
     public void theMainPageIsOpened() {
-        webDriverManager = new WebDriverManager();
+        webDriverFactory = new WebDriverFactory();
         configFileReader = new ConfigFileReader();
-        driver = webDriverManager.getDriver();
+        driver = webDriverFactory.getDriver();
         driver.manage().window().maximize();
         driver.get(configFileReader.getApplicationUrl());
         pageObjectManager = new PageObjectManager(driver);
+        mainPage = pageObjectManager.getMainPage();
+        mainPage.checkWelcomeHeader();
     }
-
     @When("the search field filled with {string}")
     public void theSearchFieldFilledWithValue(String value) {
         mainPage = pageObjectManager.getMainPage();
@@ -45,8 +42,8 @@ public class Stepdefinitions {
 
     @And("I click on the search button")
     public void iClickOnTheSearchButton() {
-
-        mainPage = pageObjectManager.getMainPage();mainPage.clickOnTheSearchButton();
+        mainPage = pageObjectManager.getMainPage();
+        mainPage.clickOnTheSearchButton();
     }
 
     @Then("the {string} page loaded")
@@ -111,13 +108,13 @@ public class Stepdefinitions {
     }
 
     @And("I click on the Continue button")
-    public void iClickOnTheContinueButton() throws InterruptedException {
+    public void iClickOnTheContinueButton() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.clickOnTheLoginButton();
     }
 
     @And("I fill the password field with invalid value")
-    public void iFillThePasswordFieldWithInvalidValue() throws InterruptedException {
+    public void iFillThePasswordFieldWithInvalidValue() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.fillLoginCredentials();
     }
@@ -129,6 +126,12 @@ public class Stepdefinitions {
     }
     @After
     public void afterScenario(){
-        webDriverManager.closeDriver();
+        webDriverFactory.closeDriver();
+    }
+
+    @And("the Cookie disclaimer is closed")
+    public void theCookieDisclaimerIsClosed() {
+        mainPage = pageObjectManager.getMainPage();
+        mainPage.clickOnTheCookieDisclaimer();
     }
 }
