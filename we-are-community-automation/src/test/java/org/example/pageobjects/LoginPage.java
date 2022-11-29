@@ -1,5 +1,6 @@
 package org.example.pageobjects;
 
+import org.example.dataProvider.ConfigFileReader;
 import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -36,20 +37,27 @@ public class LoginPage {
     @FindBy(id = "hasLength-msg")
     private WebElement lenghtError;
 
+    @FindBy(id = "kc-form-wrapper")
+    private WebElement form;
+
+    ConfigFileReader configFileReader;
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public void checkWelcomeHeader() {
-        waitForPageReadiness();
+    public void checkLoginPageWelcomeHeader() {
+        configFileReader = new ConfigFileReader();
+        waitForElementToBeVisible(form);
         String actual = welcomeHeader.getText();
-        String expected = "Choose login option to proceed:";
+        String expected = configFileReader.getLoginPageWelcomeHeader();
         Assert.assertEquals(expected, actual);
     }
 
     public void fillTheEmailField() {
-        emailField.sendKeys("Test@email.com");
+        configFileReader = new ConfigFileReader();
+        emailField.sendKeys(configFileReader.getTestEmail());
     }
 
     public void clickOnTheLoginButton() {
@@ -57,26 +65,32 @@ public class LoginPage {
     }
 
     public void fillLoginCredentials() {
+        configFileReader = new ConfigFileReader();
         waitForElementToBeClickable(firstName);
-        firstName.sendKeys("Test");
-        lastName.sendKeys("User");
-        password.sendKeys("test");
+        firstName.sendKeys(configFileReader.getFirstName());
+        lastName.sendKeys(configFileReader.getLastName());
+        password.sendKeys(configFileReader.getPassword());
     }
 
-    public void lenghtErrorIsVisible() {
+    public void lenghtErrorIsTheExpected() {
+        configFileReader = new ConfigFileReader();
         String actual = lenghtError.getText();
-        String expected = "at least 9 characters";
+        String expected = configFileReader.getLengthError();
         Assert.assertEquals(expected, actual);
     }
 
-    public void waitForPageReadiness() {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-                driver ->
-                        String.valueOf(
-                                ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
-                        )
-        );
+    public void lengthErrorIsVisible() {
+        waitForElementToBeVisible(lenghtError);
     }
+
+//    public void waitForPageReadiness() {
+//        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+//                driver ->
+//                        String.valueOf(
+//                                ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+//                        )
+//        );
+//    }
 
     public void waitForElementToBeClickable(final WebElement webElement) {
         try {
@@ -88,4 +102,13 @@ public class LoginPage {
         }
     }
 
+    public void waitForElementToBeVisible(final WebElement webElement) {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                    ExpectedConditions.visibilityOf(webElement)
+            );
+        } catch (NoSuchElementException exception) {
+            throw new RuntimeException("Element is not visible!");
+        }
+    }
 }

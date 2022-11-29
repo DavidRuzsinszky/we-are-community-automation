@@ -41,7 +41,7 @@ public class Stepdefinitions {
     @Given("the main page is loaded")
     public void theMainPageIsOpened() {
         mainPage = pageObjectManager.getMainPage();
-        mainPage.checkWelcomeHeader();
+        mainPage.checkMainPageWelcomeHeader();
     }
 
     @When("the search field filled with {string}")
@@ -99,7 +99,7 @@ public class Stepdefinitions {
     }
 
     @When("I click on the Login button")
-    public void iClickOnTheLoginButton() throws InterruptedException {
+    public void iClickOnTheLoginButton() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheLoginButton();
     }
@@ -107,7 +107,7 @@ public class Stepdefinitions {
     @And("the Login page opened")
     public void theLoginPageOpened() {
         loginPage = pageObjectManager.getLoginPage();
-        loginPage.checkWelcomeHeader();
+        loginPage.checkLoginPageWelcomeHeader();
     }
 
     @And("I fill the email field")
@@ -129,15 +129,21 @@ public class Stepdefinitions {
         loginPage.fillLoginCredentials();
     }
 
-    @Then("the error should be shown")
-    public void theErrorShouldBeShown() {
+    @Then("the length error's value is the required")
+    public void theLengthErrorValueIsTheRequired() {
         loginPage = pageObjectManager.getLoginPage();
-        loginPage.lenghtErrorIsVisible();
+        loginPage.lenghtErrorIsTheExpected();
     }
 
     @And("the Cookie disclaimer is closed")
     public void theCookieDisclaimerIsClosed() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheCookieDisclaimer();
+    }
+
+    @Then("the error message about invalid length is visible")
+    public void theErrorAboutInvalidLengthIsVisible() {
+        loginPage = pageObjectManager.getLoginPage();
+        loginPage.lengthErrorIsVisible();
     }
 }

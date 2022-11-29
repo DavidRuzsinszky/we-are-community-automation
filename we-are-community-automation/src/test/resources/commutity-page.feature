@@ -30,5 +30,6 @@ Feature: WeAreCommunity tests
     And I fill the email field
     And I click on the Continue button
     And I fill the password field with invalid value
-    Then the error should be shown
+    Then the error message about invalid length is visible
+    Then the length error's value is the required
 

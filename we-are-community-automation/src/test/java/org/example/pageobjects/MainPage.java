@@ -1,5 +1,6 @@
 package org.example.pageobjects;
 
+import org.example.dataProvider.ConfigFileReader;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -11,8 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+
 public class MainPage {
     WebDriver driver;
+    ConfigFileReader configFileReader;
     @FindBy(xpath = "//div/input[@class='evnt-text-fields form-control evnt-search small']")
     private WebElement searchBar;
 
@@ -68,15 +71,15 @@ public class MainPage {
         option.click();
     }
 
-    public void clickOnTheLoginButton() throws InterruptedException {
+    public void clickOnTheLoginButton() {
         waitForElementToBeClickable(loginButton);
         loginButton.click();
-        Thread.sleep(5000);
     }
 
-    public void checkWelcomeHeader() {
+    public void checkMainPageWelcomeHeader() {
+        configFileReader = new ConfigFileReader();
         String actual = header.getText();
-        String expected = "Achieve more with the community";
+        String expected = configFileReader.getMainPageWelcomeHeader();
         Assert.assertEquals(expected, actual);
     }
 
