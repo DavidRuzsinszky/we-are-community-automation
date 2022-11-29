@@ -1,6 +1,7 @@
 package org.example.stepdefinitions;
 
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -22,18 +23,27 @@ public class Stepdefinitions {
     WebDriverFactory webDriverFactory;
     ConfigFileReader configFileReader;
 
-
-    @Given("the main page is loaded")
-    public void theMainPageIsOpened() {
+    @Before
+    public void beforeScenario() {
         webDriverFactory = new WebDriverFactory();
         configFileReader = new ConfigFileReader();
         driver = webDriverFactory.getDriver();
         driver.manage().window().maximize();
         driver.get(configFileReader.getApplicationUrl());
         pageObjectManager = new PageObjectManager(driver);
+    }
+
+    @After
+    public void afterScenario() {
+        webDriverFactory.closeDriver();
+    }
+
+    @Given("the main page is loaded")
+    public void theMainPageIsOpened() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.checkWelcomeHeader();
     }
+
     @When("the search field filled with {string}")
     public void theSearchFieldFilledWithValue(String value) {
         mainPage = pageObjectManager.getMainPage();
@@ -123,10 +133,6 @@ public class Stepdefinitions {
     public void theErrorShouldBeShown() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.lenghtErrorIsVisible();
-    }
-    @After
-    public void afterScenario(){
-        webDriverFactory.closeDriver();
     }
 
     @And("the Cookie disclaimer is closed")
