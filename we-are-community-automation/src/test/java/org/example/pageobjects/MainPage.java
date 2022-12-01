@@ -2,9 +2,7 @@ package org.example.pageobjects;
 
 import org.example.dataProvider.ConfigFileReader;
 import org.junit.Assert;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class MainPage {
     WebDriver driver;
@@ -38,7 +37,7 @@ public class MainPage {
     private WebElement loginButton;
 
     @FindBy(xpath = "//div[@class = 'evnt-text']/h1")
-    private WebElement header;
+    private WebElement headerElement;
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -76,16 +75,21 @@ public class MainPage {
         loginButton.click();
     }
 
-    public void checkMainPageWelcomeHeader() {
-        configFileReader = new ConfigFileReader();
-        String actual = header.getText();
-        String expected = configFileReader.getMainPageWelcomeHeader();
-        Assert.assertEquals(expected, actual);
+    public void checkMainPageIsLoaded() {
+        waitForPageReadiness();
     }
 
     public void clickOnTheCookieDisclaimer() {
         waitForElementToBeClickable(cookieDisclaimerButton);
         cookieDisclaimerButton.click();
+    }
+
+
+    public void checkThePageHeader(String header) {
+        waitForPageReadiness();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        WebElement value = driver.findElement(By.xpath(String.format("//h1[text()=\"%s\"]", header)));
+        waitForElementToBeVisible(value);
     }
 
     public void waitForElementToBeClickable(final WebElement webElement) {
@@ -95,6 +99,21 @@ public class MainPage {
             );
         } catch (NoSuchElementException exception) {
             throw new RuntimeException("Element is not clickable!");
+        }
+    }
+    public void waitForPageReadiness() {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                driver ->
+                        String.valueOf(
+                                ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+                        )
+        );
+    }
+    public void waitForElementToBeVisible(final WebElement webElement) {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(webElement));
+        } catch (NoSuchElementException exception) {
+            throw new RuntimeException("Element is not visible!");
         }
     }
 }

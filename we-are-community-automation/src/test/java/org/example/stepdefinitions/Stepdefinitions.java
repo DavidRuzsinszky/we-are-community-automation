@@ -39,10 +39,10 @@ public class Stepdefinitions {
         webDriverFactory.closeDriver();
     }
 
-    @Given("the main page is loaded")
+    @Given("the Main page is loaded")
     public void theMainPageIsOpened() {
         mainPage = pageObjectManager.getMainPage();
-        mainPage.checkMainPageWelcomeHeader();
+        mainPage.checkMainPageIsLoaded();
     }
 
     @When("the search field filled with {string}")
@@ -152,5 +152,11 @@ public class Stepdefinitions {
     public void iFillTheUserCredentialsWithTheFollowings(DataTable userCredentials) {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.fillLoginCredentials(userCredentials);
+    }
+
+    @And("the page header is {string}")
+    public void thePageHeaderIs(String header) {
+        mainPage = pageObjectManager.getMainPage();
+        mainPage.checkThePageHeader(header);
     }
 }
