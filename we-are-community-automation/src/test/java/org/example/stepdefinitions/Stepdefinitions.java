@@ -154,7 +154,7 @@ public class Stepdefinitions {
         loginPage.fillLoginCredentials(userCredentials);
     }
 
-    @And("the page header is {string}")
+    @And("the page header should be {string}")
     public void thePageHeaderIs(String header) {
         mainPage = pageObjectManager.getMainPage();
         mainPage.checkThePageHeader(header);

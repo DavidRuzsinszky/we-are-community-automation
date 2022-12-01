@@ -2,34 +2,39 @@ Feature: WeAreCommunity tests
 
   Scenario: Search for Debrecen Java Community
     Given the Main page is loaded
-    And the page header is 'Achieve more with the community'
+    And the page header should be 'Achieve more with the community'
     And the Cookie disclaimer is closed
+
     When the search field filled with 'Debrecen Java Community'
     And the Search button is clicked
     Then the 'search' page loaded
 
   Scenario: Change location in Events pages
     Given the Main page is loaded
-    And the page header is 'Achieve more with the community'
+    And the page header should be 'Achieve more with the community'
     And the Cookie disclaimer is closed
+
     When the Events button is clicked
     Then the 'events' page loaded
+
     When the Location is clicked
     And the Location input is filled with 'Hungary'
     And 'Hungary' is selected from the list
 
   Scenario: Change the language
     Given the Main page is loaded
-    And the page header is 'Achieve more with the community'
+    And the page header should be 'Achieve more with the community'
     And the Cookie disclaimer is closed
+
     When the language selector is clicked
     And russian option is selected
-    And the page header is 'Добивайся большего вместе с сообществом'
+    And the page header should be 'Добивайся большего вместе с сообществом'
 
   Scenario Outline: Signup with invalid password
     Given the Main page is loaded
-    And the page header is 'Achieve more with the community'
+    And the page header should be 'Achieve more with the community'
     And the Cookie disclaimer is closed
+    
     When the Login button is clicked
     And the Login page is opened
     And the email field is filled with 'Test@email.com'
