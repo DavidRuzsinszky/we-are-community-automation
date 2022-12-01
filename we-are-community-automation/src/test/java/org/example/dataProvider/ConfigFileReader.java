@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigFileReader {
-    private Properties properties;
-    private final String propertyFilePath = "src/test/resources/configs/Config.properties";
+    private final Properties properties;
 
     public ConfigFileReader() {
         BufferedReader reader;
+        String propertyFilePath = "src/test/resources/configs/Config.properties";
         try {
             reader = new BufferedReader(new FileReader(propertyFilePath));
             properties = new Properties();
@@ -37,43 +37,18 @@ public class ConfigFileReader {
         else throw new RuntimeException("url not specified in the Configuration.properties file.");
     }
 
-    public String getTestEmail(){
-        String email = properties.getProperty("testEmail");
-        if (email != null) return email;
-        else throw new RuntimeException("testEmail not specified in the Configuration.properties file.");
-    }
-
-    public String getFirstName(){
-        String firstName = properties.getProperty("firstName");
-        if (firstName != null) return firstName;
-        else throw new RuntimeException("firstName not specified in the Configuration.properties file.");
-    }
-    public String getLastName(){
-        String lastName = properties.getProperty("lastName");
-        if (lastName != null) return lastName;
-        else throw new RuntimeException("lastName not specified in the Configuration.properties file.");
-    }
-    public String getPassword(){
-        String pswd = properties.getProperty("password");
-        if (pswd != null) return pswd;
-        else throw new RuntimeException("password not specified in the Configuration.properties file.");
-    }
-    public String getLoginPageWelcomeHeader(){
+    public String getLoginPageWelcomeHeader() {
         String header = properties.getProperty("loginPageWelcomeHeader");
         if (header != null) return header;
         else throw new RuntimeException("loginPageWelcomeHeader not specified in the Configuration.properties file.");
     }
-    public String getLengthError(){
-        String lengthError = properties.getProperty("lengthError");
-        if (lengthError != null) return lengthError;
-        else throw new RuntimeException("lengthError not specified in the Configuration.properties file.");
-    }
 
-    public String getMainPageWelcomeHeader(){
+    public String getMainPageWelcomeHeader() {
         String header = properties.getProperty("mainPageWelcomeHeader");
         if (header != null) return header;
         else throw new RuntimeException("mainPageWelcomeHeader not specified in the Configuration.properties file.");
     }
+
     public DriverType getBrowser() {
         String browserName = properties.getProperty("browser");
         if (browserName == null || browserName.equals("chrome")) return DriverType.CHROME;

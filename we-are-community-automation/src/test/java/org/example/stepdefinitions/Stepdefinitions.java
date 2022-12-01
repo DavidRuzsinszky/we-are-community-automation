@@ -1,5 +1,6 @@
 package org.example.stepdefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -50,7 +51,7 @@ public class Stepdefinitions {
         mainPage.searchFieldFilledWithValue(value);
     }
 
-    @And("I click on the search button")
+    @And("the Search button is clicked")
     public void iClickOnTheSearchButton() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheSearchButton();
@@ -62,77 +63,77 @@ public class Stepdefinitions {
         searchPage.requiredPageLoaded(value);
     }
 
-    @When("I click on the Events button")
+    @When("the Events button is clicked")
     public void iClickOnTheAriclesButton() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheAriclesButton();
     }
 
-    @When("I click on the Location")
+    @When("the Location is clicked")
     public void iClickOnTheLocation() {
         eventsPage = pageObjectManager.getEventsPage();
         eventsPage.clickOnTheLocationButton();
 
     }
 
-    @And("I fill the Location input with {string}")
+    @And("the Location input is filled with {string}")
     public void iFillTheInputWithHungary(String location) {
         eventsPage = pageObjectManager.getEventsPage();
         eventsPage.fillTheLocationInput(location);
     }
 
-    @And("I select {string} from the list")
+    @And("{string} is selected from the list")
     public void iSelectValueFromTheList(String value) {
         eventsPage.selectValueFromTheList(value);
     }
 
-    @When("I click on the language selector")
+    @When("the language selector is clicked")
     public void iClickOnTheLanguageSelector() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheLanguageSelector();
     }
 
-    @And("I click on the russian option")
+    @And("russian option is selected")
     public void iClickOnTheRussianOption() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheRussianOption();
     }
 
-    @When("I click on the Login button")
+    @When("the Login button is clicked")
     public void iClickOnTheLoginButton() {
         mainPage = pageObjectManager.getMainPage();
         mainPage.clickOnTheLoginButton();
     }
 
-    @And("the Login page opened")
+    @And("the Login page is opened")
     public void theLoginPageOpened() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.checkLoginPageWelcomeHeader();
     }
 
-    @And("I fill the email field")
-    public void iFillTheEmailField() {
+    @And("the email field is filled with {string}")
+    public void iFillTheEmailField(String email) {
         loginPage = pageObjectManager.getLoginPage();
-        loginPage.fillTheEmailField();
+        loginPage.fillTheEmailField(email);
 
     }
 
-    @And("I click on the Continue button")
+    @And("the Continue button is clicked")
     public void iClickOnTheContinueButton() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.clickOnTheLoginButton();
     }
 
-    @And("I fill the password field with invalid value")
-    public void iFillThePasswordFieldWithInvalidValue() {
+    @And("the {string} is filled with {string}")
+    public void iFillThePasswordFieldWithInvalidValue(final String field, final String content) {
         loginPage = pageObjectManager.getLoginPage();
-        loginPage.fillLoginCredentials();
+        loginPage.getInputFieldByName(field).sendKeys(content);
     }
 
-    @Then("the length error's value is the required")
-    public void theLengthErrorValueIsTheRequired() {
+    @Then("^the '(.*)' error message of the '(?:.*)' (?:field) should be shown$")
+    public void theLengthErrorValueIsTheRequired(String errorMsg) {
         loginPage = pageObjectManager.getLoginPage();
-        loginPage.lenghtErrorIsTheExpected();
+        loginPage.lenghtErrorIsTheExpected(errorMsg);
     }
 
     @And("the Cookie disclaimer is closed")
@@ -145,5 +146,11 @@ public class Stepdefinitions {
     public void theErrorAboutInvalidLengthIsVisible() {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.lengthErrorIsVisible();
+    }
+
+    @And("the user credentials are filled with the followings")
+    public void iFillTheUserCredentialsWithTheFollowings(DataTable userCredentials) {
+        loginPage = pageObjectManager.getLoginPage();
+        loginPage.fillLoginCredentials(userCredentials);
     }
 }
