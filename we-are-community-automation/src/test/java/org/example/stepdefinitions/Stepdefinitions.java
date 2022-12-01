@@ -7,14 +7,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.config.TestConfig;
 import org.example.dataProvider.ConfigFileReader;
 import org.example.managers.PageObjectManager;
 import org.example.managers.WebDriverFactory;
 import org.example.pageobjects.*;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
+@ContextConfiguration(classes = TestConfig.class)
 public class Stepdefinitions {
     WebDriver driver;
+    @Autowired
     MainPage mainPage;
     SearchPage searchPage;
     EventsPage eventsPage;
@@ -39,10 +44,10 @@ public class Stepdefinitions {
         webDriverFactory.closeDriver();
     }
 
-    @Given("the main page is loaded")
+    @Given("the Main page is loaded")
     public void theMainPageIsOpened() {
         mainPage = pageObjectManager.getMainPage();
-        mainPage.checkMainPageWelcomeHeader();
+        mainPage.waitForPageReadiness();
     }
 
     @When("the search field filled with {string}")
@@ -152,5 +157,11 @@ public class Stepdefinitions {
     public void iFillTheUserCredentialsWithTheFollowings(DataTable userCredentials) {
         loginPage = pageObjectManager.getLoginPage();
         loginPage.fillLoginCredentials(userCredentials);
+    }
+
+    @And("the header value is {string}")
+    public void theHeaderValueIs(String header) {
+        mainPage = pageObjectManager.getMainPage();
+        mainPage.theHeaderIsTheExpected(header);
     }
 }

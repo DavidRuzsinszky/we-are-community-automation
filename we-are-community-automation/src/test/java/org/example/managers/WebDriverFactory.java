@@ -8,10 +8,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WebDriverFactory {
+    private static final String CHROME = "chrome";
+    private static final String FIREFOX = "firefox";
+
+    @Value("${browserName:chrome}")
+    private String browserName;
+
+    @Value("${headless:false}")
+    private Boolean headless;
     private WebDriver driver;
     private static DriverType driverType;
     private static EnvironmentType environmentType;

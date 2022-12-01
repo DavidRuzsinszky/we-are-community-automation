@@ -61,6 +61,11 @@
             <version>${cucumber.jvm.deps.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
 
         <!--> SPRING </-->
         <dependency>
