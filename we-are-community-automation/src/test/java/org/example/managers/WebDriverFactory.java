@@ -4,31 +4,17 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.dataProvider.FileReaderManager;
 import org.example.enums.DriverType;
 import org.example.enums.EnvironmentType;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 public class WebDriverFactory {
-    private static final String CHROME = "chrome";
-    private static final String FIREFOX = "firefox";
-
-    @Value("${browserName:chrome}")
-    private String browserName;
-
-    @Value("${headless:false}")
-    private Boolean headless;
     private WebDriver driver;
-    private static DriverType driverType;
-    private static EnvironmentType environmentType;
-
-    public WebDriverFactory() {
-        driverType = FileReaderManager.getInstance().getConfigReader().getBrowser();
-        environmentType = FileReaderManager.getInstance().getConfigReader().getEnvironment();
-    }
 
     public WebDriver getDriver() {
         if (driver == null) driver = createDriver();
@@ -36,6 +22,7 @@ public class WebDriverFactory {
     }
 
     private WebDriver createDriver() {
+        EnvironmentType environmentType = FileReaderManager.getInstance().getConfigReader().getEnvironment();
         switch (environmentType) {
             case LOCAL:
                 driver = createLocalDriver();
@@ -52,6 +39,7 @@ public class WebDriverFactory {
     }
 
     private WebDriver createLocalDriver() {
+        DriverType driverType = FileReaderManager.getInstance().getConfigReader().getBrowser();
         switch (driverType) {
             case FIREFOX:
                 driver = setUpFirefoxDriver();
@@ -76,9 +64,11 @@ public class WebDriverFactory {
         return new ChromeDriver();
     }
 
-    public void closeDriver() {
-        driver.close();
-        driver.quit();
+    public void close() {
+        if (Objects.nonNull(driver)) {
+            driver.close();
+            driver = null;
+        }
     }
 
 }

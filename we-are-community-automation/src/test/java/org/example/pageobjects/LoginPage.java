@@ -2,19 +2,17 @@ package org.example.pageobjects;
 
 import io.cucumber.datatable.DataTable;
 import org.example.dataProvider.ConfigFileReader;
+import org.example.managers.WebDriverFactory;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.util.Map;
 
-public class LoginPage {
-    WebDriver driver;
+@Component
+public class LoginPage extends PageObjectUtils {
 
     @FindBy(id = "chooseContainer")
     private WebElement welcomeHeader;
@@ -41,9 +39,8 @@ public class LoginPage {
 
     ConfigFileReader configFileReader;
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public LoginPage(WebDriverFactory factory) {
+        super(factory);
     }
 
     public void checkLoginPageWelcomeHeader() {
@@ -78,7 +75,7 @@ public class LoginPage {
 
     public void lenghtErrorIsTheExpected(String msg) {
         waitForPageReadiness();
-        WebElement error = driver.findElement(By.xpath(String.format("//li[text()=\"%s\"]", msg)));
+        WebElement error = factory.getDriver().findElement(By.xpath(String.format("//li[text()=\"%s\"]", msg)));
         waitForElementToBeVisible(error);
     }
 
@@ -86,28 +83,4 @@ public class LoginPage {
         waitForElementToBeVisible(lenghtError);
     }
 
-    public void waitForPageReadiness() {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-                driver ->
-                        String.valueOf(
-                                ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
-                        )
-        );
-    }
-
-    public void waitForElementToBeClickable(final WebElement webElement) {
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(webElement));
-        } catch (NoSuchElementException exception) {
-            throw new RuntimeException("Element is not clickable!");
-        }
-    }
-
-    public void waitForElementToBeVisible(final WebElement webElement) {
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(webElement));
-        } catch (NoSuchElementException exception) {
-            throw new RuntimeException("Element is not visible!");
-        }
-    }
 }

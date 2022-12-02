@@ -1,24 +1,21 @@
 package org.example.pageobjects;
 
+import org.example.managers.WebDriverFactory;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.PageFactory;
+import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
-public class SearchPage {
-    WebDriver driver;
+@Component
+public class SearchPage extends PageObjectUtils {
     @FindBy(xpath = "//div/h1")
     private WebElement logo;
     @FindBy(xpath = "//h2[text()='Debrecen Java Community']")
     private WebElement card;
 
-    public SearchPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public SearchPage(WebDriverFactory factory) {
+        super(factory);
     }
 
     public void requiredPageLoaded(String value) {
